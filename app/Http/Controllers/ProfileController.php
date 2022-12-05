@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileStoreRequest;
+use App\Http\Requests\ProfileUpdatRequest;
 use App\Models\Profile;
 use Illuminate\Http\Request;
 
@@ -43,7 +44,7 @@ class ProfileController extends Controller
             'number'=>$request->number,
         ]);
 
-        return redirect()->route('index');
+        return redirect()->route('profile.index');
     }
 
     /**
@@ -65,7 +66,8 @@ class ProfileController extends Controller
      */
     public function edit($id)
     {
-        return 'Eidt page';
+        $profile = Profile::find($id);
+        return view('pages.edit',compact('profile'));
     }
 
     /**
@@ -75,9 +77,15 @@ class ProfileController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(ProfileUpdatRequest $request, $id)
     {
-        //
+        $profile = Profile::find($id);
+        $profile->update([
+            'name'=>$request->name,
+            'email'=>$request->email,
+            'number'=>$request->number,
+        ]);
+        return redirect()->route('profile.index');
     }
 
     /**
@@ -88,6 +96,7 @@ class ProfileController extends Controller
      */
     public function destroy($id)
     {
-        return 'Destray';
+        $profile = Profile::find($id)->delete();
+        return back();
     }
 }

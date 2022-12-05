@@ -15,4 +15,4 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-Route::resource('/', ProfileController::class);
+Route::resource('/profile', ProfileController::class);

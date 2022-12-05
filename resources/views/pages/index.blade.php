@@ -3,7 +3,7 @@
 @section('title','Profile Lists')
 @section('content')
     <div class="div col-md-12">
-        <a class="btn btn-primary mt-2" href="{{route('create')}}">Create a new profile</a>
+        <a class="btn btn-primary mt-2" href="{{route('profile.create')}}">Create a new profile</a>
     </div>
     <div class="div col-md-12">
         <table class="table">
@@ -24,8 +24,10 @@
                 <td>{{$profile->email}}</td>
                 <td>{{$profile->number}}</td>
                 <td class="d-flex">
-                  <a href="{{route('edit',$profile->id)}}" class="btn btn-info">Edit</a>
-                  <form action="{{route('destroy',$profile->id)}}" method="post">
+                  <a href="{{route('profile.edit',$profile->id)}}" class="btn btn-info">Edit</a>
+                  <form action="{{route('profile.destroy',$profile->id)}}" method="post">
+                    @method('DELETE')
+                    @csrf
                     <button class="btn btn-danger" type="submit">Delete</button>
                   </form>
                 </td>

@@ -3,13 +3,13 @@
 
 @section('content')
 <div class="container">
-    <div class="col-md-8 m-auto mt-2">
+    <div class="col-md-6 m-auto mt-2">
         <div class="card">
             <div class="card-header">
-              Featured
+              Profile Create
             </div>
             <div class="card-body">
-                <form method="POST" action="{{route('store')}}">
+                <form method="POST" action="{{route('profile.store')}}">
                   @csrf
                     <div class="mb-3">
                       <label for="name" class="form-label">Name</label>
