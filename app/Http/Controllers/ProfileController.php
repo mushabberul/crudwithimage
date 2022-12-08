@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ProfileStoreRequest;
-use App\Http\Requests\ProfileUpdatRequest;
 use App\Models\Profile;
 use Illuminate\Http\Request;
+use Intervention\Image\Facades\Image;
+use App\Http\Requests\ProfileStoreRequest;
+use App\Http\Requests\ProfileUpdatRequest;
 
 class ProfileController extends Controller
 {
@@ -16,7 +17,7 @@ class ProfileController extends Controller
      */
     public function index()
     {
-        $profiles = Profile::select(['id','name','email','number'])->get();
+        $profiles = Profile::select(['id','name','email','number','photo'])->get();
         return view('pages.index',compact('profiles'));
     }
 
@@ -38,11 +39,13 @@ class ProfileController extends Controller
      */
     public function store(ProfileStoreRequest $request)
     {
-        Profile::create([
+
+        $profile = Profile::create([
             'name'=>$request->name,
             'email'=>$request->email,
             'number'=>$request->number,
         ]);
+        $this->singlePhoto($request,$profile->id);
 
         return redirect()->route('profile.index');
     }
@@ -85,6 +88,8 @@ class ProfileController extends Controller
             'email'=>$request->email,
             'number'=>$request->number,
         ]);
+        $this->singlePhoto($request,$profile->id);
+
         return redirect()->route('profile.index');
     }
 
@@ -96,7 +101,33 @@ class ProfileController extends Controller
      */
     public function destroy($id)
     {
-        $profile = Profile::find($id)->delete();
+        $profile = Profile::find($id);
+        if('default.png' != $profile->photo){
+            $photo_location = 'public/uploads/' . $profile->photo;
+            unlink(base_path($photo_location));
+        }
+        $profile->delete();
         return back();
+    }
+    public function singlePhoto($request,$profile_id)
+    {
+        $profile = Profile::find($profile_id);
+        
+        if($request->file('photo')){
+            if('default.png' != $profile->photo){
+                $photo_location = 'public/uploads/' . $profile->photo;
+                unlink(base_path($photo_location));
+            }
+        
+        $uploaded_file = $request->file('photo');
+        $photo_name = $profile_id . '.'. $uploaded_file->getClientOriginalExtension();
+        $photo_location = 'public/uploads/' . $photo_name;
+
+        Image::make($uploaded_file)->resize(600,600)->save(base_path($photo_location));
+        $profile->update([
+            'photo'=>$photo_name,
+        ]);
+        
+      }  
     }
 }

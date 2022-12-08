@@ -13,6 +13,7 @@
                 <th scope="col">Name</th>
                 <th scope="col">Email</th>
                 <th scope="col">Number</th>
+                <th scope="col">Photo</th>
                 <th scope="col">Action</th>
               </tr>
             </thead>
@@ -23,9 +24,10 @@
                 <td>{{$profile->name}}</td>
                 <td>{{$profile->email}}</td>
                 <td>{{$profile->number}}</td>
-                <td class="d-flex">
+                <td><img width="100" height="100" src="{{asset('uploads')}}/{{$profile->photo}}" alt=""></td>
+                <td class="">
                   <a href="{{route('profile.edit',$profile->id)}}" class="btn btn-info">Edit</a>
-                  <form action="{{route('profile.destroy',$profile->id)}}" method="post">
+                  <form action="{{route('profile.destroy',$profile->id)}}" method="post" class="d-inline">
                     @method('DELETE')
                     @csrf
                     <button class="btn btn-danger" type="submit">Delete</button>

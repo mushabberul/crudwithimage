@@ -1,5 +1,8 @@
 @extends('layouts.master')
 @section('title','Profile Create')
+@push('style')
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/css/dropify.min.css">
+@endpush
 
 @section('content')
 <div class="container">
@@ -9,7 +12,7 @@
               Profile Create
             </div>
             <div class="card-body">
-                <form method="POST" action="{{route('profile.store')}}">
+                <form method="POST" action="{{route('profile.store')}}" enctype="multipart/form-data">
                   @csrf
                     <div class="mb-3">
                       <label for="name" class="form-label">Name</label>
@@ -32,10 +35,10 @@
                         <div class="text-danger">{{$message}}</div>
                       @enderror
                     </div>
-                    {{-- <div class="mb-3">
+                    <div class="mb-3">
                       <label class="form-label" for="photo">Select a photo</label>
-                      <input type="file" class="form-control" id="photo" name="photo">
-                    </div> --}}
+                      <input type="file" name="photo" class="imageshow" data-default-file="url_of_your_file" />
+                    </div>
                     <button type="submit" class="btn btn-primary">Submit</button>
                   </form>
             </div>
@@ -43,3 +46,17 @@
     </div>
 </div>
 @endsection
+@push('script')
+  <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/js/dropify.min.js"></script>
+  <script>
+    $('.imageshow').dropify({
+        messages: {
+            'default': 'Drag and drop a file',
+            'replace': 'Drag and drop or click to replace',
+            'remove':  'Remove',
+            'error':   'Ooops, something wrong happended.'
+        }
+      });
+  </script>
+@endpush
